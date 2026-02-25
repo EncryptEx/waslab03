@@ -2,6 +2,6 @@
 
 Students:
 
-* Jaume, López
+* López, Jaume
 
-* Genís, López
+* López, Genís

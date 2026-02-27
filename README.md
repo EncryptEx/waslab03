@@ -5,3 +5,7 @@ Students:
 * López, Jaume
 
 * López, Genís
+
+Usuari mastodon: 
+
+@encryptex

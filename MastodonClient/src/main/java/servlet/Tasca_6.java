@@ -24,7 +24,7 @@ public class Tasca_6 extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         JSONArray result;
-        String URI = "https://mastodont.cat/api/v1/accounts/109862447110628983/followers?limit=10";
+        String URI = "https://mastodont.cat/api/v1/accounts/109862447110628983/following";
         String TOKEN = ResourceBundle.getBundle("token").getString("token");
 
         try {
@@ -67,10 +67,9 @@ public class Tasca_6 extends HttpServlet {
         for (int i = 0; i < result.length(); i++) {
             JSONObject account = result.getJSONObject(i);
             String avatarurl = account.getString("avatar");
-            String username = account.getString("username");
             String displayname = account.getString("display_name");
             String acct = account.getString("acct");
-            Integer nfollowers = account.getInt("followers_count");
+            int nfollowers = account.getInt("followers_count");
             JSONArray statuses;
 
             try {
@@ -100,19 +99,19 @@ public class Tasca_6 extends HttpServlet {
                 String content = tut.getString("content");
                 String createdAt = tut.getString("created_at");
                 String dateSpace = createdAt.replace("T", " ").replace("Z", "");
-                boolean reblog = tut.getBoolean("reblogged");
+                var isreblogged = !(tut.isNull("reblog"));
                 String classes = "tut";
-                if(reblog) {
+                if(isreblogged) {
                     classes += " reblog";
                     // get the retut content
-                    JSONObject originaltut = tut.getJSONObject("reblog");
+                    var originaltut = tut.getJSONObject("reblog");
                     content = originaltut.getString("content");
+                    JSONObject accountretut = originaltut.getJSONObject("account");
                     dateSpace = originaltut.getString("created_at").replace("T", " ").replace("Z", "");
-                    Object oaccount = originaltut.get("account");
-                    //String originalauthor = " <span class=\"original-author\">(Original: " + oaccount.)
-                    //dateSpace = "\uD83D\uDD01 Retut - "+ dateSpace + ;
+                    String originalauthor = " <span class=\"original-author\">(Original: " + accountretut.getString("display_name") + " (@" + accountretut.getString("acct") + "))</span>";
+                    dateSpace = "\uD83D\uDD01 Retut - "+ dateSpace + originalauthor;
                 }
-                out.println("" +
+                out.println(
                         "<div class=\""+ classes +"\">" +
                         "<p class=\"timestamp\">" + dateSpace + "</p>\n" +
                         "<div class=\"content\">" + content + "</div>\n" +
